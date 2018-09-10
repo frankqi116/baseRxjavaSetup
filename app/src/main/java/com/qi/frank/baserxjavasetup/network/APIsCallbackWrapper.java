@@ -37,17 +37,25 @@ public abstract class APIsCallbackWrapper<T extends Response> extends Disposable
         if (t instanceof HttpException) {
             Response response = ((HttpException) t).response();
             if (response != null) {
-                view.onShowError(getErrorMessage(response.errorBody()));
+                onShowError(getErrorMessage(response.errorBody()));
             } else {
-                view.onShowError("Unexpected response");
+                onShowError("Unexpected response");
             }
         } else if (t instanceof SocketTimeoutException) {
             view.onTimeout();
         } else if (t instanceof IOException) {
             view.onNetworkError();
         } else {
-            view.onShowError("Unexpected response");
+            onShowError("Unexpected response");
         }
+    }
+
+    /**
+     * notice when you override this need to hide process manually
+     * @param message
+     */
+    public void onShowError(String message){
+        view.onShowError(message);
     }
 
     @Override
