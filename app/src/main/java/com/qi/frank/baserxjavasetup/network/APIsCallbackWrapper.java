@@ -15,7 +15,7 @@ import okhttp3.ResponseBody;
 import retrofit2.HttpException;
 import retrofit2.Response;
 
-public abstract class APIsCallbackWrapper<T extends Response> extends DisposableObserver<T> {
+public abstract class APIsCallbackWrapper<T> extends DisposableObserver<T> {
 
     private static final String TAG = "APIsCallbackWrapper";
 
@@ -39,6 +39,7 @@ public abstract class APIsCallbackWrapper<T extends Response> extends Disposable
             if (response != null) {
                 onShowError(getErrorMessage(response.errorBody()));
             } else {
+                Log.d(TAG, "onError() called with: t = [" + t + "]");
                 onShowError("Unexpected response");
             }
         } else if (t instanceof SocketTimeoutException) {
@@ -46,15 +47,17 @@ public abstract class APIsCallbackWrapper<T extends Response> extends Disposable
         } else if (t instanceof IOException) {
             view.onNetworkError();
         } else {
+            Log.d(TAG, "onError() called with: t = [" + t + "]");
             onShowError("Unexpected response");
         }
     }
 
     /**
      * notice when you override this need to hide process manually
+     *
      * @param message
      */
-    public void onShowError(String message){
+    public void onShowError(String message) {
         view.onShowError(message);
     }
 
@@ -79,10 +82,10 @@ public abstract class APIsCallbackWrapper<T extends Response> extends Disposable
                     APIArrayError error = gson.fromJson(body, APIArrayError.class);
                     message = error.getMessage();
                 } else {
-                    message = "Network error";
+                    message = "Network error, or errorBody is empty";
                 }
             } catch (JsonSyntaxException e) {
-                message = "Data structure issue";
+                message = "Data structure issue " + e.getMessage();
             }
         }
         return message;

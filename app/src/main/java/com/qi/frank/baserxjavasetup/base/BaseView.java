@@ -1,22 +1,20 @@
 package com.qi.frank.baserxjavasetup.base;
 
-import com.wang.avi.AVLoadingIndicatorView;
-
 public interface BaseView {
 
-  int getContentViewLayoutResId();
+    int getContentViewLayoutResId();
 
-  void showLoading(AVLoadingIndicatorView indicator);
+    void showLoading();
 
-  void hideLoading();
+    void hideLoading();
 
-  void onShowError(String error);
+    void onShowError(String error);
 
-  void onTimeout();
+    void onTimeout();
 
-  void onNetworkError();
+    void onNetworkError();
 
-  boolean isNetworkConnected();
+    boolean isNetworkConnected();
 
-  void onConnectionError();
+    void onConnectionError();
 }
